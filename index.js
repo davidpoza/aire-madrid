@@ -63,8 +63,8 @@ class Air {
     })
 
     if (score && score.length) {
-      let name = score[0].name 
-      let value = score[0].value 
+      let name = score[0].name
+      let value = score[0].value
 
       return { name, value }
     } else {
@@ -129,7 +129,7 @@ class Air {
       this.importData().then((stations) => {
 
         this.stations = stations
-        
+
         if (options == undefined) {
           let result = this.getArrayFromHash(this.stations)
 
@@ -138,7 +138,7 @@ class Air {
           })
 
           return resolve(result)
-        } 
+        }
 
         let pollutants = options.pollutants
 
@@ -158,7 +158,7 @@ class Air {
             result.push(this.filterByStation(stationID, pollutants))
           })
 
-          resolve(result)
+          resolve(result.filter(s => s))
         }
       })
     })
@@ -166,6 +166,7 @@ class Air {
 
   filterByStation (stationID, pollutantsIDs) {
     let station = this.stations[stationID]
+    if (!station) return;
     let result = station
 
     if (pollutantsIDs && pollutantsIDs.length) {
@@ -189,7 +190,7 @@ class Air {
     let lastValidValueIndex = 0
 
     for (let i = 0; i < 24; i++) {
-      let id = this.padNumber(i + 1) 
+      let id = this.padNumber(i + 1)
 
       let valid = point[`V${id}`] === 'V'
       values[i] = valid ? +point[`H${id}`] : undefined
@@ -205,7 +206,7 @@ class Air {
 
     if (values.length === 0) {
       error = 'This station is not returning any readings'
-    } 
+    }
 
     let result = { ...pollutant, values }
 
@@ -271,3 +272,4 @@ class Air {
 }
 
 module.exports = new Air()
+
